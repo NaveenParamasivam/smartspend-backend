@@ -1,0 +1,65 @@
+# ===============================
+# 🔐 Environment & Secrets
+# ===============================
+.env
+.env.*
+!.env.example
+
+# ===============================
+# 🧱 Build files
+# ===============================
+/target/
+*.jar
+*.war
+*.ear
+
+# ===============================
+# 🧠 IDE files
+# ===============================
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# ===============================
+# 🧾 Logs
+# ===============================
+logs/
+*.log
+
+# ===============================
+# 🧪 Test / temp files
+# ===============================
+*.tmp
+*.temp
+
+# ===============================
+# 📦 Dependency directories (if any)
+# ===============================
+node_modules/
+
+# ===============================
+# 🖥 OS files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# 🔑 Application secrets (extra safety)
+# ===============================
+application-dev.properties
+application-prod.properties
+application-local.properties
+
+# ===============================
+# 🔥 Misc
+# ===============================
+*.swp
+*~
