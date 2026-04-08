@@ -49,8 +49,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
 //                .requestMatchers("/auth/**").permitAll()
 //                .requestMatchers("/ws/**").permitAll()
-                    .requestMatchers("/auth/login", "/auth/register").permitAll()
-                    .requestMatchers("/auth/me").authenticated()
+                            .requestMatchers("/api/auth/**").permitAll()
+//                    .requestMatchers("/auth/login", "/auth/register").permitAll()
+//                    .requestMatchers("/auth/me").authenticated()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             )
@@ -63,7 +64,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+//        config.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+        config.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
