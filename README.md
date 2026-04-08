@@ -12,10 +12,10 @@
 
 ## 🔗 Links
 
-| Resource | URL |
-|---|---|
-| 🚀 Live API Base URL | `https://YOUR_RENDER_URL/api` |
-| 🖥️ Frontend Live App | `https://YOUR_VERCEL_URL` |
+| Resource | URL                                                                             |
+|---|---------------------------------------------------------------------------------|
+| 🚀 Live API Base URL | `https://smartspend-backend-production-9c9c.up.railway.app/api/`                |
+| 🖥️ Frontend Live App | [Live URL](https://smartspendfe.netlify.app/)                                   |
 | 🖥️ Frontend Repo | [smartspend-frontend](https://github.com/NaveenParamasivam/smartspend-frontend) |
 | 🧪 Test Report | [View on GitHub Pages](https://naveenparamasivam.github.io/smartspend-backend/) |
 
