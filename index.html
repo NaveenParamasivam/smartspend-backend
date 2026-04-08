@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSpend Backend - Test Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success: #22c55e;
+            --success-bg: rgba(34, 197, 94, 0.15);
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --accent: #3b82f6;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .project-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-type {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary-card.success {
+            border-color: var(--success);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .success .card-icon {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .success .card-value {
+            color: var(--success);
+        }
+
+        .card-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-badge.success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Test Results Section */
+        .section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Test Class */
+        .test-class {
+            margin-bottom: 1.5rem;
+        }
+
+        .test-class:last-child {
+            margin-bottom: 0;
+        }
+
+        .class-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .class-header:hover {
+            background: #3d5168;
+        }
+
+        .class-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .class-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .duration {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .test-count {
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Test List */
+        .test-list {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.875rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+        }
+
+        .test-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .test-name {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9rem;
+        }
+
+        .test-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .test-time {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        /* Project Structure */
+        .structure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .structure-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .structure-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .file-list {
+            list-style: none;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .file-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .timestamp {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .project-name {
+                font-size: 1.75rem;
+            }
+
+            .section {
+                padding: 1.25rem;
+            }
+
+            .class-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .test-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Collapsible */
+        .collapsible .test-list {
+            display: block;
+        }
+
+        .collapsible.collapsed .test-list {
+            display: none;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .collapsible.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1 class="project-name">SmartSpend Backend</h1>
+        <p class="project-type">Spring Boot Application Test Report</p>
+    </header>
+
+    <!-- Summary Section -->
+    <div class="summary-grid">
+        <div class="summary-card success">
+            <div class="card-icon">✓</div>
+            <div class="card-value">18</div>
+            <div class="card-label">Total Tests</div>
+        </div>
+        <div class="summary-card success">
+            <div class="card-icon">✓</div>
+            <div class="card-value">18</div>
+            <div class="card-label">Passed</div>
+        </div>
+        <div class="summary-card">
+            <div class="card-icon">✗</div>
+            <div class="card-value">0</div>
+            <div class="card-label">Failed</div>
+        </div>
+        <div class="summary-card">
+            <div class="card-icon">⏱</div>
+            <div class="card-value">7.64s</div>
+            <div class="card-label">Duration</div>
+        </div>
+    </div>
+
+    <!-- Overall Status -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="section-icon">📊</span>
+                Test Execution Summary
+            </h2>
+            <span class="status-badge success">
+                    <span class="status-dot"></span>
+                    All Tests Passed
+                </span>
+        </div>
+        <p style="color: var(--text-secondary);">
+            All test suites executed successfully with a 100% pass rate. The backend application
+            demonstrates robust functionality across integration and unit test scenarios.
+        </p>
+    </div>
+
+    <!-- Integration Tests -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="section-icon">🔌</span>
+                Integration Tests
+            </h2>
+            <span class="test-count">10 Tests</span>
+        </div>
+
+        <div class="test-class collapsible">
+            <div class="class-header" onclick="toggleCollapse(this)">
+                    <span class="class-name">
+                        <span class="toggle-icon">▼</span>
+                        IntegrationTests
+                    </span>
+                <span class="class-meta">
+                        <span class="duration">⏱ 7.13s</span>
+                        <span class="test-count">10/10 Passed</span>
+                    </span>
+            </div>
+            <div class="test-list">
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            getMe_withToken_returnsUser()
+                        </span>
+                    <span class="test-time">1.45s</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            getExpenses_returnsPagedList()
+                        </span>
+                    <span class="test-time">641ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            getMe_noToken_returns401()
+                        </span>
+                    <span class="test-time">539ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            register_validRequest_returns200()
+                        </span>
+                    <span class="test-time">799ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            getDashboard_returnsData()
+                        </span>
+                    <span class="test-time">579ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            createExpense_valid_returns200()
+                        </span>
+                    <span class="test-time">550ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            login_validCredentials_returnsToken()
+                        </span>
+                    <span class="test-time">756ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            createExpense_missingTitle_returns400()
+                        </span>
+                    <span class="test-time">549ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            register_duplicateEmail_returns409()
+                        </span>
+                    <span class="test-time">511ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            login_wrongPassword_returns401()
+                        </span>
+                    <span class="test-time">757ms</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Tests -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="section-icon">🧪</span>
+                Unit Tests
+            </h2>
+            <span class="test-count">8 Tests</span>
+        </div>
+
+        <!-- ExpenseServiceTests -->
+        <div class="test-class collapsible">
+            <div class="class-header" onclick="toggleCollapse(this)">
+                    <span class="class-name">
+                        <span class="toggle-icon">▼</span>
+                        ExpenseServiceTests
+                    </span>
+                <span class="class-meta">
+                        <span class="duration">⏱ 333ms</span>
+                        <span class="test-count">3/3 Passed</span>
+                    </span>
+            </div>
+            <div class="test-list">
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            getById_found_returnsResponse()
+                        </span>
+                    <span class="test-time">313ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            createExpense_success()
+                        </span>
+                    <span class="test-time">12ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            deleteExpense_notFound_throws()
+                        </span>
+                    <span class="test-time">8ms</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AuthServiceTests -->
+        <div class="test-class collapsible" style="margin-top: 1rem;">
+            <div class="class-header" onclick="toggleCollapse(this)">
+                    <span class="class-name">
+                        <span class="toggle-icon">▼</span>
+                        AuthServiceTests
+                    </span>
+                <span class="class-meta">
+                        <span class="duration">⏱ 177ms</span>
+                        <span class="test-count">5/5 Passed</span>
+                    </span>
+            </div>
+            <div class="test-list">
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            register_duplicateEmail_throws()
+                        </span>
+                    <span class="test-time">149ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            register_success()
+                        </span>
+                    <span class="test-time">8ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            login_badCredentials_throws()
+                        </span>
+                    <span class="test-time">10ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            verifyEmail_expiredToken_throws()
+                        </span>
+                    <span class="test-time">6ms</span>
+                </div>
+                <div class="test-item">
+                        <span class="test-name">
+                            <span class="checkmark">✓</span>
+                            forgotPassword_unknownEmail_stillReturnsSuccess()
+                        </span>
+                    <span class="test-time">4ms</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Structure -->
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="section-icon">📁</span>
+                Project Structure
+            </h2>
+        </div>
+        <div class="structure-grid">
+            <div class="structure-card">
+                <h3 class="structure-title">Backend (Maven)</h3>
+                <ul class="file-list">
+                    <li class="file-item">
+                        <span class="file-icon">📂</span>
+                        src/main
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">📂</span>
+                        src/test
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">🐳</span>
+                        Dockerfile
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">📋</span>
+                        pom.xml
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">🔧</span>
+                        .env
+                    </li>
+                </ul>
+            </div>
+            <div class="structure-card">
+                <h3 class="structure-title">Tech Stack</h3>
+                <ul class="file-list">
+                    <li class="file-item">
+                        <span class="file-icon">☕</span>
+                        Java 21
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">🍃</span>
+                        Spring Boot 3.2.0
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">🗄</span>
+                        JPA/Hibernate
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">🔐</span>
+                        JWT Security
+                    </li>
+                    <li class="file-item">
+                        <span class="file-icon">📧</span>
+                        JavaMail
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Generated by <strong>IntelliJ IDEA</strong> on <span class="timestamp">08 April 2026, 11:32 AM</span></p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">SmartSpend Backend Test Suite</p>
+    </footer>
+</div>
+
+<script>
+    function toggleCollapse(header) {
+        const testClass = header.parentElement;
+        testClass.classList.toggle('collapsed');
+    }
+</script>
+</body>
+</html>

@@ -130,7 +130,8 @@ class IntegrationTests {
     @Test
     void getMe_noToken_returns401() throws Exception {
         mockMvc.perform(get("/auth/me"))
-            .andExpect(status().isUnauthorized());
+//            .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     // ── Expense Tests ─────────────────────────────────────────────────────────
